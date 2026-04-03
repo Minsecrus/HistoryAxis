@@ -11,8 +11,8 @@ export const yearMarks = [
 
 const timelineSegments = [
   { start: -1700000, end: -10000, pxPerYear: 0.0045 },
-  { start: -10000, end: -256, pxPerYear: 0.28 },
-  { start: -256, end: 1900, pxPerYear: 5 },
+  { start: -10000, end: -300, pxPerYear: 1 },
+  { start: -300, end: 1900, pxPerYear: 3 },
   { start: 1900, end: 2025, pxPerYear: 16 },
 ] as const;
 
@@ -56,7 +56,7 @@ export const getNavigationStep = (year: number) => {
     return 5000;
   }
 
-  if (year <= -256) {
+  if (year <= -800) {
     return 500;
   }
 

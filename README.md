@@ -1,15 +1,15 @@
 # HistoryAxis
 
-HistoryAxis is a React + TypeScript timeline app for browsing major periods of Chinese history on a single horizontal axis. The interface is optimized for classroom review and keyboard navigation.
+HistoryAxis 是一个基于 React + TypeScript 构建的时间轴应用，用一条横向主轴浏览中国历史的重要时期。界面针对课堂复习与键盘导航做了优化，适合快速梳理时代脉络。
 
-## Features
+## 功能特性
 
-- Continuous timeline from early human activity to the present
-- Era labels, event markers, and institutional topics
-- Left and right arrow key navigation
-- Static deployment with Vite and GitHub Pages
+- 从早期人类活动延续至当代的连续时间轴
+- 时代标签、事件标记与制度专题信息
+- 支持键盘左右方向键导航
+- 基于 Vite 与 GitHub Pages 的静态部署
 
-## Tech Stack
+## 技术栈
 
 - React 19
 - TypeScript
@@ -17,32 +17,32 @@ HistoryAxis is a React + TypeScript timeline app for browsing major periods of C
 - Tailwind CSS 4
 - pnpm
 
-## Development
+## 本地开发
 
 ```bash
 pnpm install
 pnpm dev
 ```
 
-## Build
+## 构建与预览
 
 ```bash
 pnpm build
 pnpm preview
 ```
 
-## Deployment
+## 部署说明
 
-The repository includes a GitHub Actions workflow that builds the project on every push to `main` and deploys `dist/` to GitHub Pages.
+仓库包含 GitHub Actions 工作流：每次推送到 `main` 分支时，都会自动构建项目并将 `dist/` 部署到 GitHub Pages。
 
-For the site to publish correctly in GitHub:
+要确保站点在 GitHub 上正常发布，请按以下步骤配置：
 
-1. Open the repository settings.
-2. Go to `Pages`.
-3. Set `Source` to `GitHub Actions`.
+1. 打开仓库设置页。
+2. 进入 `Pages`。
+3. 将 `Source` 设置为 `GitHub Actions`。
 
-The Vite `base` path is configured for the repository name `HistoryAxis`, so the site will be served under `/HistoryAxis/`.
+当前 Vite 的 `base` 路径已经按仓库名 `HistoryAxis` 配置，因此站点会部署在 `/HistoryAxis/` 路径下。
 
-## License
+## 许可证
 
-This project is licensed under the MIT License. See [LICENSE](./LICENSE).
+本项目采用 MIT License。详见 [LICENSE](./LICENSE)。
