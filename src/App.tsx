@@ -3,15 +3,14 @@ import { Info, X } from "lucide-react";
 import { TimelineView, createTimelineYears } from "./components/TimelineView";
 import { eras } from "./data/timeline";
 import {
-  endYear,
-  getNavigationStep,
+  clampYear,
+  getNextNavigationYear,
   getXByYear,
-  startYear,
   timelineWidth,
 } from "./lib/timeline";
 
 function App() {
-  const [focusYear, setFocusYear] = useState(960);
+  const [focusYear, setFocusYear] = useState(() => clampYear(960));
   const [isInfoOpen, setIsInfoOpen] = useState(false);
   const [viewportWidth, setViewportWidth] = useState(0);
   const timelineWindowRef = useRef<HTMLDivElement | null>(null);
@@ -32,9 +31,10 @@ function App() {
       event.preventDefault();
 
       setFocusYear((current) => {
-        const step = getNavigationStep(current);
-        const delta = event.key === "ArrowRight" ? step : -step;
-        return Math.min(endYear, Math.max(startYear, current + delta));
+        return getNextNavigationYear(
+          current,
+          event.key === "ArrowRight" ? "right" : "left",
+        );
       });
     };
 
@@ -63,7 +63,7 @@ function App() {
     return () => observer.disconnect();
   }, []);
 
-  const viewportCenter = getXByYear(focusYear);
+  const viewportCenter = getXByYear(clampYear(focusYear));
   const translateX = Math.min(
     Math.max(viewportWidth / 2 - viewportCenter, viewportWidth - timelineWidth),
     0,

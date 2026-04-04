@@ -1,19 +1,19 @@
 import type { EraLevel } from "../types/history";
 
 export const startYear = -1700000;
-export const endYear = 2025;
+export const endYear = 2026;
 export const timelinePaddingLeft = 140;
 export const timelinePaddingRight = 96;
 export const yearMarks = [
   -1700000, -1000000, -500000, -100000, -10000, -8000, -6000, -4000, -3000,
-  -2000, -1000, 0, 500, 1000, 1500, 1900, 1950, 2000, 2025,
+  -2000, -1000, 0, 500, 1000, 1500, 1900, 1950, 2000, 2026,
 ] as const;
 
 const timelineSegments = [
   { start: -1700000, end: -10000, pxPerYear: 0.0045 },
   { start: -10000, end: -300, pxPerYear: 1 },
   { start: -300, end: 1900, pxPerYear: 3 },
-  { start: 1900, end: 2025, pxPerYear: 16 },
+  { start: 1900, end: 2026, pxPerYear: 16 },
 ] as const;
 
 export const getXByYear = (year: number) => {
@@ -41,6 +41,10 @@ export const getSpanWidth = (start: number, end: number) => {
 
 export const timelineWidth = getXByYear(endYear) + timelinePaddingRight;
 
+export const clampYear = (year: number) => {
+  return Math.min(endYear, Math.max(startYear, year));
+};
+
 export const getNavigationStep = (year: number) => {
   if (year <= -100000) {
     return 50000;
@@ -65,6 +69,26 @@ export const getNavigationStep = (year: number) => {
   }
 
   return 10;
+};
+
+export const getNextNavigationYear = (
+  year: number,
+  direction: "left" | "right",
+) => {
+  const current = clampYear(year);
+
+  if (direction === "left" && current === startYear) {
+    return current;
+  }
+
+  if (direction === "right" && current === endYear) {
+    return current;
+  }
+
+  const step = getNavigationStep(current);
+  const delta = direction === "right" ? step : -step;
+
+  return clampYear(current + delta);
 };
 
 export const toYearLabel = (year: number) => {

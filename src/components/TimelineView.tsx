@@ -25,6 +25,33 @@ export function TimelineView({
   timelineWindowRef,
   translateX,
 }: TimelineViewProps) {
+  const eventLabelWidth = 96
+  const eventRows: number[] = []
+  const positionedEventTopics = eras
+    .flatMap((era) =>
+      era.eventTopics.map((topic) => ({
+        key: `${era.id}-${topic.label}`,
+        label: topic.label,
+        left: getXByYear(topic.year),
+      })),
+    )
+    .sort((a, b) => a.left - b.left)
+    .map((topic) => {
+      const start = topic.left - eventLabelWidth / 2
+      let row = eventRows.findIndex((rowEnd) => start > rowEnd + 12)
+
+      if (row === -1) {
+        row = eventRows.length
+      }
+
+      eventRows[row] = topic.left + eventLabelWidth / 2
+
+      return {
+        ...topic,
+        row,
+      }
+    })
+
   return (
     <section
       className="relative grid min-h-screen place-items-center overflow-hidden px-0 pb-8 pt-24 md:pt-28"
@@ -106,49 +133,42 @@ export function TimelineView({
             )
           })}
 
+          {positionedEventTopics.map((topic) => (
+            <aside
+              key={topic.key}
+              className="absolute -translate-x-1/2 text-center"
+              style={{
+                left: `${topic.left}px`,
+                top: `calc(50% - ${248 + topic.row * 34}px)`,
+                width: `${eventLabelWidth}px`,
+              }}
+            >
+              <p className="text-[10px] leading-4 text-neutral-500">{topic.label}</p>
+            </aside>
+          ))}
+
           {eras.map((era) => {
             const left = getXByYear(era.start)
             const width = getSpanWidth(era.start, era.end)
             const center = left + Math.max(width, 36) / 2
 
-            return (
-              <div key={`${era.id}-topics`}>
-                {era.eventTopics.map((topic) => {
-                  const topicLeft = getXByYear(topic.year)
-
-                  return (
-                    <aside
-                      key={`${era.id}-${topic.label}`}
-                      className="absolute -translate-x-1/2 text-center"
-                      style={{
-                        left: `${topicLeft}px`,
-                        top: 'calc(50% - 248px)',
-                        width: '96px',
-                      }}
-                    >
-                      <p className="text-[10px] leading-4 text-neutral-500">{topic.label}</p>
-                    </aside>
-                  )
-                })}
-
-                {era.institutionalTopics.length > 0 ? (
-                  <aside
-                    className="absolute -translate-x-1/2 text-center"
-                    style={{
-                      left: `${center}px`,
-                      top: 'calc(50% + 206px)',
-                      width: `${Math.max(width + 36, 96)}px`,
-                    }}
-                  >
-                    <div className="flex flex-wrap justify-center gap-x-3 gap-y-1 text-[10px] text-neutral-400">
-                      {era.institutionalTopics.map((topic) => (
-                        <span key={topic}>{topic}</span>
-                      ))}
-                    </div>
-                  </aside>
-                ) : null}
-              </div>
-            )
+            return era.institutionalTopics.length > 0 ? (
+              <aside
+                key={`${era.id}-topics`}
+                className="absolute -translate-x-1/2 text-center"
+                style={{
+                  left: `${center}px`,
+                  top: 'calc(50% + 206px)',
+                  width: `${Math.max(width + 36, 96)}px`,
+                }}
+              >
+                <div className="flex flex-wrap justify-center gap-x-3 gap-y-1 text-[10px] text-neutral-400">
+                  {era.institutionalTopics.map((topic) => (
+                    <span key={topic}>{topic}</span>
+                  ))}
+                </div>
+              </aside>
+            ) : null
           })}
         </div>
       </div>
