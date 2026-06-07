@@ -35,6 +35,29 @@ export const getXByYear = (year: number) => {
   return x;
 };
 
+export const getYearByX = (x: number) => {
+  let currentX = timelinePaddingLeft;
+
+  if (x <= currentX) {
+    return startYear;
+  }
+
+  for (const segment of timelineSegments) {
+    const segmentWidth = (segment.end - segment.start) * segment.pxPerYear;
+    const segmentEndX = currentX + segmentWidth;
+
+    if (x <= segmentEndX) {
+      return clampYear(
+        Math.round(segment.start + (x - currentX) / segment.pxPerYear),
+      );
+    }
+
+    currentX = segmentEndX;
+  }
+
+  return endYear;
+};
+
 export const getSpanWidth = (start: number, end: number) => {
   return getXByYear(end) - getXByYear(start);
 };

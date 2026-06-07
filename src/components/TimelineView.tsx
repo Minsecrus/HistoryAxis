@@ -1,4 +1,4 @@
-import type { RefObject } from 'react'
+import type { PointerEventHandler, RefObject } from 'react'
 import type { Era } from '../types/history'
 import {
   getSpanWidth,
@@ -15,6 +15,12 @@ type TimelineViewProps = {
   timelineYears: number[]
   timelineWindowRef: RefObject<HTMLDivElement | null>
   translateX: number
+  isDragging: boolean
+  onLostPointerCapture: PointerEventHandler<HTMLDivElement>
+  onPointerCancel: PointerEventHandler<HTMLDivElement>
+  onPointerDown: PointerEventHandler<HTMLDivElement>
+  onPointerMove: PointerEventHandler<HTMLDivElement>
+  onPointerUp: PointerEventHandler<HTMLDivElement>
 }
 
 export function TimelineView({
@@ -24,6 +30,12 @@ export function TimelineView({
   timelineYears,
   timelineWindowRef,
   translateX,
+  isDragging,
+  onLostPointerCapture,
+  onPointerCancel,
+  onPointerDown,
+  onPointerMove,
+  onPointerUp,
 }: TimelineViewProps) {
   const eventLabelWidth = 96
   const eventRows: number[] = []
@@ -59,12 +71,21 @@ export function TimelineView({
     >
       <div
         ref={timelineWindowRef}
-        className="relative h-[min(100svh-8rem,42rem)] w-screen overflow-hidden md:h-[min(100svh-9rem,44rem)]"
+        className={`relative h-[min(100svh-8rem,42rem)] w-screen touch-none select-none overflow-hidden md:h-[min(100svh-9rem,44rem)] ${
+          isDragging ? 'cursor-grabbing' : 'cursor-grab'
+        }`}
+        onLostPointerCapture={onLostPointerCapture}
+        onPointerCancel={onPointerCancel}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
       >
         <div className="pointer-events-none absolute inset-y-0 left-0 z-[3] w-16 bg-gradient-to-r from-white via-white/90 to-transparent md:w-28" />
         <div className="pointer-events-none absolute inset-y-0 right-0 z-[3] w-16 bg-gradient-to-l from-white via-white/90 to-transparent md:w-28" />
         <div
-          className="absolute inset-y-0 left-0 transition-transform duration-500 ease-out"
+          className={`absolute inset-y-0 left-0 ${
+            isDragging ? '' : 'transition-transform duration-500 ease-out'
+          }`}
           style={{
             width: `${timelineWidth}px`,
             transform: `translateX(${translateX}px)`,

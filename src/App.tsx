@@ -6,14 +6,21 @@ import {
   clampYear,
   getNextNavigationYear,
   getXByYear,
+  getYearByX,
   timelineWidth,
 } from "./lib/timeline";
 
 function App() {
   const [focusYear, setFocusYear] = useState(() => clampYear(960));
   const [isInfoOpen, setIsInfoOpen] = useState(false);
+  const [isDraggingTimeline, setIsDraggingTimeline] = useState(false);
   const [viewportWidth, setViewportWidth] = useState(0);
   const timelineWindowRef = useRef<HTMLDivElement | null>(null);
+  const dragStateRef = useRef<{
+    pointerId: number;
+    startClientX: number;
+    startTimelineX: number;
+  } | null>(null);
 
   const timelineYears = useMemo(() => createTimelineYears(), []);
 
@@ -69,6 +76,15 @@ function App() {
     0,
   );
 
+  const endTimelineDrag = (pointerId: number) => {
+    if (dragStateRef.current?.pointerId !== pointerId) {
+      return;
+    }
+
+    dragStateRef.current = null;
+    setIsDraggingTimeline(false);
+  };
+
   return (
     <main className="relative min-h-screen overflow-hidden bg-white text-neutral-950">
       <header className="absolute left-4 top-4 z-10 max-w-[calc(100vw-7rem)] rounded-3xl border border-neutral-200/80 bg-white/95 px-5 py-4 shadow-[0_10px_30px_rgba(0,0,0,0.04)] backdrop-blur md:left-6 md:top-6 md:px-6 md:py-5">
@@ -96,6 +112,41 @@ function App() {
         timelineYears={timelineYears}
         timelineWindowRef={timelineWindowRef}
         translateX={translateX}
+        isDragging={isDraggingTimeline}
+        onPointerDown={(event) => {
+          if (!event.isPrimary) {
+            return;
+          }
+
+          dragStateRef.current = {
+            pointerId: event.pointerId,
+            startClientX: event.clientX,
+            startTimelineX: getXByYear(clampYear(focusYear)),
+          };
+          event.currentTarget.setPointerCapture(event.pointerId);
+          setIsDraggingTimeline(true);
+        }}
+        onPointerMove={(event) => {
+          const dragState = dragStateRef.current;
+
+          if (!dragState || dragState.pointerId !== event.pointerId) {
+            return;
+          }
+
+          const deltaX = event.clientX - dragState.startClientX;
+          setFocusYear(getYearByX(dragState.startTimelineX - deltaX));
+          event.preventDefault();
+        }}
+        onPointerUp={(event) => {
+          event.currentTarget.releasePointerCapture(event.pointerId);
+          endTimelineDrag(event.pointerId);
+        }}
+        onPointerCancel={(event) => {
+          endTimelineDrag(event.pointerId);
+        }}
+        onLostPointerCapture={(event) => {
+          endTimelineDrag(event.pointerId);
+        }}
       />
 
       {isInfoOpen ? (
