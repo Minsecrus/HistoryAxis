@@ -87,7 +87,7 @@ function App() {
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-white text-neutral-950">
-      <header className="absolute left-4 top-4 z-10 max-w-[calc(100vw-7rem)] rounded-3xl border border-neutral-200/80 bg-white/95 px-5 py-4 shadow-[0_10px_30px_rgba(0,0,0,0.04)] backdrop-blur md:left-6 md:top-6 md:px-6 md:py-5">
+      <header className="absolute left-5 top-5 z-10 md:left-8 md:top-7">
         <p className="text-lg font-semibold tracking-[0.16em] uppercase md:text-xl">
           <span className="text-neutral-500">History</span>
           <span className="text-neutral-900">Axis</span>
@@ -100,7 +100,7 @@ function App() {
         aria-haspopup="dialog"
         aria-expanded={isInfoOpen}
         onClick={() => setIsInfoOpen(true)}
-        className="absolute right-4 top-4 z-10 flex h-14 w-14 items-center justify-center rounded-3xl border border-neutral-200/80 bg-white/95 text-neutral-700 shadow-[0_10px_30px_rgba(0,0,0,0.04)] backdrop-blur transition hover:border-neutral-300 hover:text-neutral-950 md:right-6 md:top-6"
+        className="absolute right-5 top-5 z-10 text-neutral-500 transition hover:text-neutral-950 md:right-8 md:top-8"
       >
         <Info className="h-5 w-5" strokeWidth={1.9} />
       </button>
@@ -163,17 +163,12 @@ function App() {
             onClick={(event) => event.stopPropagation()}
           >
             <div className="flex items-start justify-between gap-4">
-              <div>
-                <p className="text-[11px] uppercase tracking-[0.28em] text-neutral-400">
-                  Project Info
-                </p>
-                <h2
-                  id="info-modal-title"
-                  className="mt-2 text-2xl font-semibold tracking-[0.04em] text-neutral-950"
-                >
-                  HistoryAxis
-                </h2>
-              </div>
+              <h2
+                id="info-modal-title"
+                className="text-2xl font-semibold tracking-[0.04em] text-neutral-950"
+              >
+                HistoryAxis
+              </h2>
               <button
                 type="button"
                 aria-label="Close project info"
@@ -186,16 +181,23 @@ function App() {
 
             <div className="mt-6 space-y-4 text-sm leading-7 text-neutral-600">
               <p>
-                HistoryAxis 是一个基于 React + TypeScript
-                构建的中国历史时间轴项目，
-                用一条可横向浏览的主轴串联主要时代、事件与制度脉络，适合课堂演示、
-                复习梳理与快速定位历史阶段。
+                一条从元谋人到今天的中国历史时间轴。轴线上是各个时代，上方标注重要事件，下方是同时期的制度、技术与文化特征。
               </p>
               <p>
-                当前交互支持键盘左右方向键移动焦点年份，界面强调单屏连续浏览，帮助用户以更直观的方式理解不同历史时期之间的前后关系。
+                时间刻度并不均匀：远古部分被压缩，越接近现代，每一年占的宽度越大。
               </p>
+              <p>拖动画面，或按左右方向键浏览。</p>
               <p>
-                By <strong>Minsecrus</strong>.
+                By{" "}
+                <a
+                  href="https://github.com/Minsecrus"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="font-semibold text-neutral-900 underline decoration-neutral-300 underline-offset-4 transition hover:decoration-neutral-900"
+                >
+                  Minsecrus
+                </a>
+                .
               </p>
             </div>
 

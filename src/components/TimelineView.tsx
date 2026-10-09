@@ -143,7 +143,7 @@ export function TimelineView({
                     top: `${labelOffset}px`,
                   }}
                 >
-                  <span className="text-[10px] uppercase tracking-[0.2em] text-neutral-400">
+                  <span className="text-[10px] uppercase tracking-[0.2em] text-neutral-600">
                     {toYearLabel(era.start)} - {toYearLabel(era.end)}
                   </span>
                   <h2 className={`text-base leading-none tracking-[-0.04em] ${style.text}`}>
@@ -164,7 +164,7 @@ export function TimelineView({
                 width: `${eventLabelWidth}px`,
               }}
             >
-              <p className="text-[10px] leading-4 text-neutral-500">{topic.label}</p>
+              <p className="text-[10px] leading-4 text-neutral-700">{topic.label}</p>
             </aside>
           ))}
 
@@ -183,7 +183,7 @@ export function TimelineView({
                   width: `${Math.max(width + 36, 96)}px`,
                 }}
               >
-                <div className="flex flex-wrap justify-center gap-x-3 gap-y-1 text-[10px] text-neutral-400">
+                <div className="flex flex-wrap justify-center gap-x-3 gap-y-1 text-[10px] text-neutral-600">
                   {era.institutionalTopics.map((topic) => (
                     <span key={topic}>{topic}</span>
                   ))}
